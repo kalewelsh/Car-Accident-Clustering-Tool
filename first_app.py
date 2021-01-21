@@ -34,7 +34,7 @@ import plotly.express as px
 
 @st.cache
 def make_state_dict():
-    states_df = pd.read_csv('C:/Users/Kyle/Documents/states.txt', delim_whitespace = True)
+    states_df = pd.read_csv('states.txt', delim_whitespace = True)
     states_df.set_index('State',drop = True, inplace = True)
     states_df.drop(columns = 'State_Name',inplace = True)
     states_df['lat and lng'] = states_df[['Lat','Lng']].values.tolist()
