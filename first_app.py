@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.cluster import DBSCAN
 import plotly.express as px
 
+
 @st.cache
 def make_state_dict():
     states_df = pd.read_csv('states.txt', delim_whitespace = True)
@@ -27,11 +28,12 @@ def load_data_2019():
     car_accidents_df_2019 = pd.read_csv('car_accidents_2019.csv')
     return car_accidents_df_2019
 
+
 car_accidents_df_2019 = load_data_2019()
 
 st.title('Car Accident Cluster Identifier')
 
-min_samples = st.slider('Minimum Number of Crashes in Cluster', value = 30)  
+min_samples = st.slider('Minimum Number of Crashes in Neighborhood', value = 30)  
 max_distance = st.slider('Max Distance Between Crashes (Meters)',min_value = 1, max_value = 100, value = 30)
 
 state_coord_dict = make_state_dict()
