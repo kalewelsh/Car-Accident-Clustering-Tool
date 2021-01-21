@@ -14,19 +14,18 @@ import plotly.express as px
 
 
 
-@st.cache
-def load_data():
-    
-    car_accidents_df = pd.read_csv('C:/Users/Kyle/Downloads/archive (2)/US_Accidents_June20.csv')
-    date_list = car_accidents_df['Start_Time'].to_list()
-    year_list = []
-    for date in date_list:
-        year_list.append(date.split('-')[0])  
-    car_accidents_df['Year'] = year_list
-    car_accidents_df['wight'] = 1
-    car_accidents_df_2019 = car_accidents_df[car_accidents_df['Year'] == '2019']
-    car_accidents_df_2019.rename(columns = {'Start_Lat':'latitude','Start_Lng':'longitude'},inplace = True)
-    return car_accidents_df_2019[['latitude','longitude','State','Year']]
+#@st.cache
+#def load_data():
+    #car_accidents_df = pd.read_csv('C:/Users/Kyle/Downloads/archive (2)/US_Accidents_June20.csv')
+    #date_list = car_accidents_df['Start_Time'].to_list()
+    #year_list = []
+    #for date in date_list:
+     #   year_list.append(date.split('-')[0])  
+    #car_accidents_df['Year'] = year_list
+    #car_accidents_df['wight'] = 1
+    #car_accidents_df_2019 = car_accidents_df[car_accidents_df['Year'] == '2019']
+    #car_accidents_df_2019.rename(columns = {'Start_Lat':'latitude','Start_Lng':'longitude'},inplace = True)
+    #return car_accidents_df_2019[['latitude','longitude','State','Year']]
 
 
 #def generate_base_map(default_location, default_zoom = 7):
@@ -51,9 +50,12 @@ def plot_map(default_locatoin):
                         radius = 5, center = default_location,hover_data = ['Number Of Accidents'],
                         width = 800, height = 600)
     return fig
+@st.cache
+def load_data_2019():
+    car_accidents_df_2019 = pd.read_csv('car_accidents_2019.csv')
+    return car_accidents_df_2019
 
-car_accidents_df_2019 = load_data()
-
+car_accidents_df_2019 = load_data_2019()
 
 st.title('Car Accident Cluster Identifier')
 
