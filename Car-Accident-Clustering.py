@@ -9,7 +9,7 @@ import plotly.express as px
 #state names corresponding with their GPS coordinates
 @st.cache
 def make_state_dict():
-    states_df = pd.read_csv('C:/Users/Kyle/Documents/states.txt', delim_whitespace = True)
+    states_df = pd.read_csv('states.txt', delim_whitespace = True)
     states_df.set_index('State',drop = True, inplace = True)
     states_df.drop(columns = 'State_Name',inplace = True)
     states_df['lat and lng'] = states_df[['Lat','Lng']].values.tolist()
@@ -22,7 +22,6 @@ def make_state_dict():
 def plot_map(default_location,df):
     mapbox_access_token =  'pk.eyJ1Ijoia3lsZXdlbHNoIiwiYSI6ImNramhlOTBvYjRrZGsyc3NibXlzYXJhYnIifQ.Dp5cYMqjvoSOFNTMMWgo2g'
     px.set_mapbox_access_token(mapbox_access_token)
-    
     #adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
     df = df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
     
@@ -36,7 +35,7 @@ def plot_map(default_location,df):
 #Loads and cache's the car accident data.
 @st.cache(allow_output_mutation=True)
 def load_data_2019():
-    car_accidents_df_2019 = pd.read_csv('C:/Users/Kyle/Documents/car_accidents_2019.csv')
+    car_accidents_df_2019 = pd.read_csv('car_accidents_2019.csv')
     return car_accidents_df_2019
 
 
@@ -50,7 +49,6 @@ def cluster(state,min_samples,max_distance):
     db = DBSCAN(eps= (max_distance/1000)/6371, min_samples = min_samples, 
                 algorithm='ball_tree', metric='haversine').fit(np.radians(coords))
     cluster_labels = db.labels_
-    
     
     cluster_accidents_df_2019 = car_accidents_df_2019_state[cluster_labels != -1]
     cluster_accidents_df_2019_grouped = cluster_accidents_df_2019.groupby(by = ['latitude','longitude']).count()
