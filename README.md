@@ -1,5 +1,5 @@
 # Car Accident Clustering Tool
-Web Application Link: https://car-accident-clustering.herokuapp.com/
+Web Application Link: https://share.streamlit.io/kalewelsh/car-accident-clustering-tool/main/Car-Accident-Clustering.py
 
 * A web application that can be used to identify clusters in card accidents across the united states
 * Uses the DBSCAN clustering algorithm to identify clusters of car accidents
