@@ -41,7 +41,7 @@ def load_data_2019():
 
 #takes the selected state and the parameters for the DBSCAN algorithm then returns a dataframe
 #of the GPS coordinates and the number of car accidents at each coordinate for the car accident clusters.
-@st.cache
+
 def cluster(state,min_samples,max_distance):
     car_accidents_df_2019_state = car_accidents_df_2019[car_accidents_df_2019['State'] == state_name_input]
     coords = car_accidents_df_2019_state[['latitude','longitude']].to_numpy()
