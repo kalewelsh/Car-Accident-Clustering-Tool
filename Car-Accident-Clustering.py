@@ -22,8 +22,7 @@ def make_state_dict():
 def plot_map(default_location):
     mapbox_access_token =  'pk.eyJ1Ijoia3lsZXdlbHNoIiwiYSI6ImNramhlOTBvYjRrZGsyc3NibXlzYXJhYnIifQ.Dp5cYMqjvoSOFNTMMWgo2g'
     px.set_mapbox_access_token(mapbox_access_token)
-    #adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
-    df = df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
+   
     
     fig = px.density_mapbox(final_cluster_df, lat='latitude', 
                         lon = 'longitude', zoom=5, mapbox_style='mapbox://styles/kylewelsh/ckjhej5ei22cq19qisu8h3qjw',
@@ -79,6 +78,8 @@ default_location = dict(lon=state_coord_dict[state_name_input][1],
 
 
 final_cluster_df = cluster(state_name_input,min_samples,max_distance)
+#adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
+final_cluster_df = df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
 
 fig = plot_map(default_location)
 st.plotly_chart(fig)
