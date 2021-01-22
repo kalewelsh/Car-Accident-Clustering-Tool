@@ -27,7 +27,7 @@ def plot_map(default_location,df):
     
     fig = px.density_mapbox(df, lat='latitude', 
                         lon = 'longitude', zoom=5, mapbox_style='mapbox://styles/kylewelsh/ckjhej5ei22cq19qisu8h3qjw',
-                        radius = 5, center = default_location,hover_data = ['Number Of Accidents'],
+                        radius = 5, center = default_location,hover_data = 'Number Of Accidents',
                         width = 800, height = 600)
     return fig
 
