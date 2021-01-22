@@ -9,7 +9,7 @@ import plotly.express as px
 #state names corresponding with their GPS coordinates
 @st.cache
 def make_state_dict():
-    states_df = pd.read_csv('states.txt', delim_whitespace = True)
+    states_df = pd.read_csv('C:/Users/Kyle/Documents/states.txt', delim_whitespace = True)
     states_df.set_index('State',drop = True, inplace = True)
     states_df.drop(columns = 'State_Name',inplace = True)
     states_df['lat and lng'] = states_df[['Lat','Lng']].values.tolist()
@@ -19,14 +19,16 @@ def make_state_dict():
 
 #this function takes the location of the chosen state and the final clustered dataframe and returns
 #a density map of clustered car accidents as a plotly figure.
-def plot_map(default_location):
+def plot_map(default_location,df):
     mapbox_access_token =  'pk.eyJ1Ijoia3lsZXdlbHNoIiwiYSI6ImNramhlOTBvYjRrZGsyc3NibXlzYXJhYnIifQ.Dp5cYMqjvoSOFNTMMWgo2g'
     px.set_mapbox_access_token(mapbox_access_token)
-   
     
-    fig = px.density_mapbox(final_cluster_df, lat='latitude', 
+    #adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
+    #df = df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
+    
+    fig = px.density_mapbox(df, lat='latitude', 
                         lon = 'longitude', zoom=5, mapbox_style='mapbox://styles/kylewelsh/ckjhej5ei22cq19qisu8h3qjw',
-                        radius = 5, center = default_location, hover_data = ['Number Of Accidents'],
+                        radius = 5, center = default_location,hover_data = ['Number Of Accidents'],
                         width = 800, height = 600)
     return fig
 
@@ -34,13 +36,12 @@ def plot_map(default_location):
 #Loads and cache's the car accident data.
 @st.cache(allow_output_mutation=True)
 def load_data_2019():
-    car_accidents_df_2019 = pd.read_csv('car_accidents_2019.csv')
+    car_accidents_df_2019 = pd.read_csv('C:/Users/Kyle/Documents/car_accidents_2019.csv')
     return car_accidents_df_2019
 
 
 #takes the selected state and the parameters for the DBSCAN algorithm then returns a dataframe
 #of the GPS coordinates and the number of car accidents at each coordinate for the car accident clusters.
-
 def cluster(state,min_samples,max_distance):
     car_accidents_df_2019_state = car_accidents_df_2019[car_accidents_df_2019['State'] == state_name_input]
     coords = car_accidents_df_2019_state[['latitude','longitude']].to_numpy()
@@ -48,6 +49,7 @@ def cluster(state,min_samples,max_distance):
     db = DBSCAN(eps= (max_distance/1000)/6371, min_samples = min_samples, 
                 algorithm='ball_tree', metric='haversine').fit(np.radians(coords))
     cluster_labels = db.labels_
+    
     
     cluster_accidents_df_2019 = car_accidents_df_2019_state[cluster_labels != -1]
     cluster_accidents_df_2019_grouped = cluster_accidents_df_2019.groupby(by = ['latitude','longitude']).count()
@@ -76,12 +78,10 @@ state_name_input = st.sidebar.selectbox('State',states)
 default_location = dict(lon=state_coord_dict[state_name_input][1],
                         lat = state_coord_dict[state_name_input][0])
 
-
+car_accidents_df_2019['weight'] = 1
 final_cluster_df = cluster(state_name_input,min_samples,max_distance)
-#adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
-#final_cluster_df = final_cluster_df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
 
-fig = plot_map(default_location)
+fig = plot_map(default_location,final_cluster_df)
 st.plotly_chart(fig)
 
 
