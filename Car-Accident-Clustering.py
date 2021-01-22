@@ -24,7 +24,7 @@ def plot_map(default_location,df):
     px.set_mapbox_access_token(mapbox_access_token)
     
     #adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
-    #df = df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
+    df = df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
     
     fig = px.density_mapbox(df, lat='latitude', 
                         lon = 'longitude', zoom=5, mapbox_style='mapbox://styles/kylewelsh/ckjhej5ei22cq19qisu8h3qjw',
