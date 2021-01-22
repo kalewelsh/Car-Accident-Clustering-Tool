@@ -79,7 +79,7 @@ default_location = dict(lon=state_coord_dict[state_name_input][1],
 
 final_cluster_df = cluster(state_name_input,min_samples,max_distance)
 #adding coordinate that is not an actual car accident in order to prevent map from deloading when there are no clusters.
-final_cluster_df = final_cluster_df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
+#final_cluster_df = final_cluster_df.append({'latitude':20,'longitude':170,'Number Of Accidents':0},ignore_index = True)
 
 fig = plot_map(default_location)
 st.plotly_chart(fig)
